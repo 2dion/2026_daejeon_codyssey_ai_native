@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Term Cafe — Milk Tea & More</title>
+<style>
+/* ============================================================
+   Design tokens — 시안에서 추출한 팔레트
+   ============================================================ */
+:root{
+  --bg:            #FDFAF5;   /* 앱 배경 (아이보리) */
+  --surface:       #FFFFFF;   /* 카드 */
+  --surface-warm:  #F6EDE0;   /* 크림 카드 / 비활성 칩 */
+  --surface-sub:   #EFE4D4;   /* 이미지 플레이스홀더 */
+  --brand:         #6B4A2E;   /* 메인 브라운 (버튼, 활성 칩) */
+  --brand-deep:    #4B3222;   /* 제목 텍스트 */
+  --brand-soft:    #8C6A4C;   /* 보조 텍스트 */
+  --muted:         #B4A18E;   /* 비활성 아이콘/캡션 */
+  --line:          #EDE2D3;   /* 구분선 */
+  --success:       #7C8B4F;   /* 주문 완료 체크 */
+  --shadow-sm: 0 2px 8px rgba(107,74,46,.06);
+  --shadow-md: 0 6px 20px rgba(107,74,46,.09);
+  --r-sm: 12px;  --r-md: 18px;  --r-lg: 24px;  --r-pill: 999px;
+  --font: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+          'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:var(--font);
+  background:#E7DED2;
+  color:var(--brand-deep);
+  -webkit-font-smoothing:antialiased;
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit;}
+img{display:block;max-width:100%;}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px;}
+
+/* ============================================================
+   디바이스 프레임
+   ============================================================ */
+.device{
+  width:390px; height:844px;
+  background:var(--bg);
+  border-radius:44px;
+  box-shadow:0 30px 70px rgba(60,40,25,.28), 0 0 0 10px #1E1712, 0 0 0 11px #3A2C22;
+  overflow:hidden; position:relative;
+}
+@media (max-width:520px), (max-height:920px){
+  body{padding:0;background:var(--bg);}
+  .device{width:100%;height:100dvh;border-radius:0;box-shadow:none;}
+}
+
+/* ============================================================
+   화면 전환
+   ============================================================ */
+.screen{
+  position:absolute; inset:0;
+  display:none; flex-direction:column;
+  background:var(--bg);
+}
+.screen.is-active{display:flex;animation:fadeUp .28s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){
+  .screen.is-active{animation:none;}
+  *{transition:none !important;}
+}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll::-webkit-scrollbar{width:0;}
+
+/* ============================================================
+   로고 / 헤더
+   ============================================================ */
+.brand{padding:26px 0 14px;text-align:center;}
+.brand svg{margin:0 auto;}
+.brand h1{
+  font-size:28px;font-weight:600;letter-spacing:-.4px;
+  color:var(--brand-deep);margin-top:4px;
+}
+.brand p{
+  font-size:9px;letter-spacing:2.6px;color:var(--brand-soft);
+  margin-top:3px;font-weight:500;
+}
+
+.topbar{
+  display:flex;align-items:center;gap:12px;
+  padding:22px 20px 10px;
+}
+.topbar h2{font-size:24px;font-weight:700;letter-spacing:-.5px;}
+.topbar .spacer{flex:1;}
+.icon-btn{
+  width:32px;height:32px;display:grid;place-items:center;
+  color:var(--brand);border-radius:10px;
+}
+.icon-btn:active{background:var(--surface-warm);}
+
+/* ============================================================
+   카테고리 칩
+   ============================================================ */
+.chips{
+  display:flex;gap:10px;overflow-x:auto;
+  padding:6px 20px 16px;scrollbar-width:none;
+}
+.chips::-webkit-scrollbar{display:none;}
+.chip{
+  flex:0 0 auto;
+  padding:11px 20px;border-radius:var(--r-pill);
+  background:var(--surface-warm);
+  color:var(--brand-soft);
+  font-size:14px;font-weight:600;white-space:nowrap;
+  border:1px solid var(--line);
+  transition:background .18s ease,color .18s ease,transform .12s ease;
+}
+.chip.is-active{background:var(--brand);color:#fff;border-color:var(--brand);}
+.chip:active{transform:scale(.96);}
+
+/* ============================================================
+   메뉴 그리드
+   ============================================================ */
+.grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  padding:0 20px 24px;
+}
+.card{
+  background:var(--surface);border-radius:var(--r-md);
+  box-shadow:var(--shadow-sm);
+  overflow:hidden;text-align:left;
+  transition:transform .14s ease,box-shadow .14s ease;
+}
+.card:active{transform:scale(.98);box-shadow:var(--shadow-md);}
+.card .thumb{
+  aspect-ratio:1/.92;border-radius:var(--r-md);
+  margin:8px 8px 0;overflow:hidden;
+}
+.card .body{padding:12px 12px 14px;position:relative;}
+.card h3{
+  font-size:14.5px;font-weight:600;line-height:1.35;
+  letter-spacing:-.2px;min-height:2.7em;
+  padding-right:34px;
+}
+.card .price{
+  font-size:15px;font-weight:600;color:var(--brand-deep);
+  margin-top:6px;
+}
+.card .add{
+  position:absolute;right:12px;bottom:12px;
+  width:30px;height:30px;border-radius:50%;
+  background:var(--brand);color:#fff;
+  display:grid;place-items:center;font-size:18px;line-height:1;
+  box-shadow:0 3px 8px rgba(107,74,46,.3);
+}
+.card .add:active{transform:scale(.9);}
+
+/* 음료 일러스트 배경 (스튜디오 톤) */
+.pour{
+  width:100%;height:100%;
+  background:linear-gradient(168deg,#EFE3D2 0%,#EFE3D2 52%,#D9C4AA 52%,#CBB399 100%);
+  display:grid;place-items:end center;
+}
+.pour svg{height:88%;}
+
+/* ============================================================
+   하단 탭바
+   ============================================================ */
+.tabbar{
+  display:flex;background:var(--surface);
+  border-top:1px solid var(--line);
+  padding:10px 0 max(12px, env(safe-area-inset-bottom));
+}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  color:var(--muted);font-size:11px;font-weight:600;
+}
+.tab.is-active{color:var(--brand);}
+.tab svg{width:24px;height:24px;}
+
+/* ============================================================
+   상세 (Customize Drink)
+   ============================================================ */
+.hero{
+  margin:6px 20px 0;border-radius:var(--r-md);
+  aspect-ratio:1/.78;overflow:hidden;
+}
+.detail-head{text-align:center;padding:22px 24px 4px;}
+.detail-head h2{font-size:26px;font-weight:700;letter-spacing:-.5px;}
+.detail-head .price{font-size:19px;font-weight:600;margin-top:8px;}
+.detail-head .desc{
+  font-size:12.5px;color:var(--brand-soft);margin-top:10px;line-height:1.6;
+}
+.option{
+  margin:16px 20px 0;background:var(--surface);
+  border-radius:var(--r-md);padding:16px 14px;
+  box-shadow:var(--shadow-sm);
+}
+.option-title{
+  display:flex;align-items:center;gap:8px;
+  font-size:15px;font-weight:700;margin-bottom:14px;padding-left:2px;
+}
+.option-title svg{width:17px;height:17px;color:var(--brand);}
+.segment{display:flex;gap:8px;}
+.seg{
+  flex:1;padding:13px 4px;border-radius:var(--r-sm);
+  background:var(--surface-warm);color:var(--brand-soft);
+  font-size:13.5px;font-weight:600;text-align:center;
+  transition:background .16s ease,color .16s ease,transform .12s ease;
+}
+.seg.is-active{background:var(--brand);color:#fff;}
+.seg:active{transform:scale(.95);}
+
+.footer-bar{
+  background:var(--surface);border-top:1px solid var(--line);
+  padding:14px 20px 10px;
+}
+.total-row{padding:0 2px 10px;}
+.total-row span{font-size:13px;color:var(--brand-soft);font-weight:600;}
+.total-row strong{display:block;font-size:26px;font-weight:700;margin-top:2px;}
+.btn-primary{
+  width:100%;padding:18px;border-radius:var(--r-pill);
+  background:var(--brand);color:#fff;
+  font-size:17px;font-weight:700;letter-spacing:-.2px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 6px 16px rgba(107,74,46,.24);
+  transition:transform .12s ease,filter .12s ease;
+}
+.btn-primary:active{transform:scale(.98);filter:brightness(1.08);}
+
+/* ============================================================
+   장바구니
+   ============================================================ */
+.panel{
+  margin:0 20px 16px;background:var(--surface);
+  border-radius:var(--r-lg);padding:18px;box-shadow:var(--shadow-sm);
+}
+.panel h3{font-size:17px;font-weight:700;margin-bottom:14px;}
+.toggle{display:flex;gap:10px;}
+.toggle button{
+  flex:1;padding:13px;border-radius:var(--r-pill);
+  border:1.5px solid var(--line);background:var(--surface);
+  color:var(--brand-soft);font-size:14.5px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.toggle button.is-active{
+  background:var(--brand);border-color:var(--brand);color:#fff;
+}
+.toggle .dot{
+  width:16px;height:16px;border-radius:50%;
+  border:1.5px solid currentColor;display:none;
+  align-items:center;justify-content:center;font-size:10px;
+}
+.toggle .is-active .dot{display:flex;}
+
+.cart-item{display:flex;align-items:center;gap:14px;}
+.cart-item .thumb{
+  width:64px;height:64px;border-radius:var(--r-sm);
+  overflow:hidden;flex:0 0 auto;
+}
+.cart-item .info{flex:1;}
+.cart-item .info b{display:block;font-size:15px;font-weight:600;}
+.cart-item .info small{
+  display:block;font-size:13px;color:var(--brand-soft);margin-top:6px;
+}
+.cart-item .amt{font-size:15px;font-weight:600;align-self:flex-end;}
+.divider{height:1px;background:var(--line);margin:18px 0 14px;}
+.sum{display:flex;justify-content:space-between;font-size:14px;color:var(--brand-soft);}
+.sum + .sum{margin-top:12px;}
+.sum.total{color:var(--brand-deep);font-weight:700;font-size:15px;}
+.sum.total b{font-size:19px;}
+
+.section-label{
+  font-size:15px;font-weight:700;padding:4px 24px 12px;
+}
+.pay-list{margin:0 20px 20px;}
+.pay{
+  width:100%;display:flex;align-items:center;gap:12px;
+  padding:16px;border-radius:var(--r-md);
+  border:1.5px solid transparent;background:transparent;
+  font-size:15px;font-weight:500;text-align:left;
+}
+.pay .radio{
+  width:22px;height:22px;border-radius:50%;
+  border:1.5px solid var(--muted);flex:0 0 auto;
+  display:grid;place-items:center;color:#fff;font-size:12px;
+}
+.pay.is-active{border-color:var(--brand);background:var(--surface);}
+.pay.is-active .radio{background:var(--brand);border-color:var(--brand);}
+
+/* ============================================================
+   주문 완료
+   ============================================================ */
+.done{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:60px 24px 0;text-align:center;overflow-y:auto;
+}
+.done .check{
+  width:74px;height:74px;border-radius:50%;
+  border:2.5px solid var(--success);color:var(--success);
+  display:grid;place-items:center;
+  animation:pop .45s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes pop{from{transform:scale(.6);opacity:0;}to{transform:scale(1);opacity:1;}}
+.done h2{font-size:27px;font-weight:800;letter-spacing:-.8px;margin-top:26px;}
+.done .sub{font-size:14px;color:var(--brand-soft);margin-top:10px;}
+.order-no{
+  margin-top:20px;padding:9px 22px;border-radius:var(--r-pill);
+  background:var(--surface-warm);font-size:15px;font-weight:600;
+}
+.receipt{
+  width:100%;margin-top:26px;background:var(--surface);
+  border-radius:var(--r-lg);padding:18px;box-shadow:var(--shadow-sm);
+  display:flex;gap:14px;text-align:left;
+}
+.receipt .thumb{
+  width:56px;height:56px;border-radius:50%;overflow:hidden;flex:0 0 auto;
+}
+.receipt .info{flex:1;}
+.receipt .info b{font-size:15px;font-weight:600;}
+.receipt .info small{display:block;font-size:13px;color:var(--brand-soft);margin-top:5px;}
+.badge{
+  display:inline-block;margin-top:10px;padding:4px 11px;
+  border-radius:var(--r-pill);background:var(--surface-warm);
+  font-size:11.5px;font-weight:600;color:var(--brand);
+}
+.store{display:block;font-size:13.5px;font-weight:500;margin-top:9px;}
+.pickup{
+  width:100%;margin-top:14px;padding:17px;
+  border-radius:var(--r-md);background:var(--surface);
+  box-shadow:var(--shadow-sm);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-size:15px;font-weight:700;
+}
+.pickup mark{background:#F0E4CE;color:var(--brand-deep);padding:2px 4px;border-radius:4px;}
+.done-actions{padding:20px;width:100%;}
+.link-btn{
+  display:block;width:100%;text-align:center;
+  font-size:14px;font-weight:600;color:var(--brand);
+  text-decoration:underline;text-underline-offset:4px;margin-bottom:16px;
+}
+
+/* ============================================================
+   마이페이지
+   ============================================================ */
+.profile{display:flex;align-items:center;gap:16px;padding:8px 26px 26px;}
+.avatar{
+  width:76px;height:76px;border-radius:50%;
+  background:var(--surface-warm);overflow:hidden;flex:0 0 auto;
+  display:grid;place-items:end center;
+}
+.profile .who small{font-size:14px;color:var(--brand-soft);}
+.profile .who b{display:block;font-size:24px;font-weight:700;margin-top:4px;}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 24px 26px;}
+.stat{
+  background:var(--surface-warm);border-radius:var(--r-md);
+  padding:20px 10px;text-align:center;box-shadow:var(--shadow-sm);
+}
+.stat svg{margin:0 auto 10px;color:var(--brand-deep);}
+.stat b{font-size:20px;font-weight:700;}
+.history{padding:0 24px 24px;}
+.history > h3{font-size:19px;font-weight:700;margin-bottom:14px;}
+.hist-item{
+  display:flex;align-items:center;gap:14px;
+  background:var(--surface-warm);border-radius:var(--r-md);
+  padding:12px;margin-bottom:12px;
+}
+.hist-item .thumb{width:56px;height:56px;border-radius:var(--r-sm);overflow:hidden;flex:0 0 auto;}
+.hist-item .info{flex:1;}
+.hist-item .info b{font-size:15px;font-weight:600;}
+.hist-item .info small{display:block;font-size:12.5px;color:var(--brand-soft);margin-top:5px;}
+.hist-item .amt{font-size:14.5px;font-weight:600;}
+.empty{
+  text-align:center;color:var(--brand-soft);font-size:13.5px;
+  padding:28px 0;background:var(--surface-warm);border-radius:var(--r-md);
+}
+</style>
+</head>
+<body>
+
+<div class="device">
+
+  <!-- ================= 1. 홈 (메뉴) ================= -->
+  <section class="screen is-active" id="screen-home">
+    <div class="scroll">
+      <header class="brand">
+        <svg width="52" height="56" viewBox="0 0 52 56" fill="none" stroke="#8C6A4C" stroke-width="1.6" stroke-linecap="round">
+          <path d="M14 20h24l-3 28a4 4 0 0 1-4 3.6H21A4 4 0 0 1 17 48z"/>
+          <path d="M11 20h30" stroke-width="2"/>
+          <path d="M31 20 34 6" />
+          <circle cx="22" cy="36" r="2" fill="#8C6A4C" stroke="none"/>
+          <circle cx="29" cy="41" r="2" fill="#8C6A4C" stroke="none"/>
+          <circle cx="24" cy="45" r="2" fill="#8C6A4C" stroke="none"/>
+          <path d="M20 12c-4-1-7 1-7 4 3 1 6-1 7-4zM32 10c1-4 4-6 7-5-.5 3-4 6-7 5z" fill="#DCCBB2" stroke="#B4A18E" stroke-width="1"/>
+        </svg>
+        <h1>Term Cafe</h1>
+        <p>MILK TEA &amp; MORE</p>
+      </header>
+
+      <nav class="chips" id="chips"></nav>
+      <div class="grid" id="menuGrid"></div>
+    </div>
+    <nav class="tabbar" data-tab="home"></nav>
+  </section>
+
+  <!-- ================= 2. 음료 상세 (Customize) ================= -->
+  <section class="screen" id="screen-detail">
+    <div class="topbar">
+      <button class="icon-btn" data-go="home" aria-label="뒤로">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+      </button>
+      <div class="spacer"></div>
+      <h2 style="font-size:20px">Customize Drink</h2>
+      <div class="spacer"></div>
+      <button class="icon-btn" id="favBtn" aria-label="찜하기" aria-pressed="false">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l8.8 8.8 8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg>
+      </button>
+    </div>
+
+    <div class="scroll">
+      <div class="hero" id="detailHero"></div>
+      <div class="detail-head">
+        <h2 id="detailName">Lemon Ade</h2>
+        <div class="price" id="detailPrice">₩4,500</div>
+        <p class="desc" id="detailDesc"></p>
+      </div>
+
+      <div class="option">
+        <div class="option-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l-1.5 17.2A2 2 0 0 1 14.5 22h-5a2 2 0 0 1-2-1.8z"/><path d="M5.6 8h12.8"/></svg>
+          Size
+        </div>
+        <div class="segment" data-group="size">
+          <button class="seg" data-value="Small">Small</button>
+          <button class="seg is-active" data-value="Medium">Medium</button>
+          <button class="seg" data-value="Large">Large</button>
+        </div>
+      </div>
+
+      <div class="option" style="margin-bottom:20px">
+        <div class="option-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7z"/><path d="m3 7 9 5 9-5M12 12v10"/></svg>
+          Sweetness
+        </div>
+        <div class="segment" data-group="sweet">
+          <button class="seg" data-value="0%">0%</button>
+          <button class="seg" data-value="25%">25%</button>
+          <button class="seg is-active" data-value="50%">50%</button>
+          <button class="seg" data-value="75%">75%</button>
+          <button class="seg" data-value="100%">100%</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <div class="total-row">
+        <span>Total</span>
+        <strong id="detailTotal">₩4,500</strong>
+      </div>
+      <button class="btn-primary" id="addToCart">Add to Cart</button>
+    </div>
+    <nav class="tabbar" data-tab="home"></nav>
+  </section>
+
+  <!-- ================= 3. 장바구니 ================= -->
+  <section class="screen" id="screen-cart">
+    <div class="topbar">
+      <button class="icon-btn" data-go="home" aria-label="뒤로">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+      </button>
+      <h2>장바구니</h2>
+    </div>
+
+    <div class="scroll">
+      <div class="panel">
+        <h3>Term Cafe 엑스포점</h3>
+        <div class="toggle" id="orderType">
+          <button data-value="매장"><span class="dot">✓</span>매장</button>
+          <button class="is-active" data-value="포장"><span class="dot">✓</span>포장</button>
+        </div>
+      </div>
+
+      <div class="panel" id="cartPanel"></div>
+
+      <h3 class="section-label">결제 수단 선택</h3>
+      <div class="pay-list" id="payList">
+        <button class="pay is-active" data-value="신용카드"><span class="radio">✓</span>신용카드</button>
+        <button class="pay" data-value="카카오페이"><span class="radio"></span>카카오페이</button>
+        <button class="pay" data-value="네이버페이"><span class="radio"></span>네이버페이</button>
+        <button class="pay" data-value="Term Cafe 포인트 결제"><span class="radio"></span>Term Cafe 포인트 결제</button>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <button class="btn-primary" id="payBtn">
+        <span id="payLabel">₩4,500 결제하기</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5 13.9 9 20.5 11 13.9 13 12 19.5 10.1 13 3.5 11 10.1 9z"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ================= 4. 주문 완료 ================= -->
+  <section class="screen" id="screen-done">
+    <div class="done">
+      <div class="check">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 5 5L19 7"/></svg>
+      </div>
+      <h2>주문이 완료되었습니다</h2>
+      <p class="sub">맛있는 음료를 준비하고 있어요</p>
+      <div class="order-no" id="orderNo">#0702</div>
+
+      <div class="receipt">
+        <div class="thumb" id="doneThumb"></div>
+        <div class="info">
+          <b id="doneName">LemonAde</b>
+          <small id="doneQty">x1</small>
+          <span class="badge" id="doneType">포장</span>
+          <span class="store">Term Cafe 엑스포점</span>
+        </div>
+        <div class="amt" id="donePrice" style="font-size:15px;font-weight:600">₩4,500</div>
+      </div>
+
+      <div class="pickup">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+        <span><mark>약 5분 후 픽업 가능</mark></span>
+      </div>
+    </div>
+
+    <div class="done-actions">
+      <button class="link-btn" data-go="mypage">주문 내역 확인하기</button>
+      <button class="btn-primary" data-go="home">홈으로 돌아가기</button>
+    </div>
+  </section>
+
+  <!-- ================= 5. 마이페이지 ================= -->
+  <section class="screen" id="screen-mypage">
+    <div class="scroll">
+      <header class="brand" style="padding-bottom:6px">
+        <svg width="46" height="50" viewBox="0 0 52 56" fill="none" stroke="#8C6A4C" stroke-width="1.6" stroke-linecap="round">
+          <path d="M14 20h24l-3 28a4 4 0 0 1-4 3.6H21A4 4 0 0 1 17 48z"/>
+          <path d="M11 20h30" stroke-width="2"/><path d="M31 20 34 6"/>
+          <circle cx="22" cy="36" r="2" fill="#8C6A4C" stroke="none"/>
+          <circle cx="29" cy="41" r="2" fill="#8C6A4C" stroke="none"/>
+          <circle cx="24" cy="45" r="2" fill="#8C6A4C" stroke="none"/>
+        </svg>
+        <h1 style="font-size:25px">Term Cafe</h1>
+        <p>MILK TEA &amp; MORE</p>
+      </header>
+
+      <div class="profile">
+        <div class="avatar">
+          <svg width="60" height="56" viewBox="0 0 60 56" fill="#4B3222">
+            <circle cx="30" cy="19" r="11"/>
+            <path d="M8 56c0-11.6 9.8-21 22-21s22 9.4 22 21z"/>
+          </svg>
+        </div>
+        <div class="who">
+          <small>Nickname</small>
+          <b>민지</b>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" stroke="none">P</text></svg>
+          <b>3,200P</b>
+        </div>
+        <div class="stat">
+          <svg width="38" height="30" viewBox="0 0 44 30" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 4h40v7a4 4 0 0 0 0 8v7H2v-7a4 4 0 0 0 0-8z"/>
+            <text x="22" y="18" text-anchor="middle" font-size="7.5" font-weight="700" fill="currentColor" stroke="none" letter-spacing="1">TICKET</text>
+          </svg>
+          <b>쿠폰 2장</b>
+        </div>
+      </div>
+
+      <div class="history">
+        <h3>주문내역</h3>
+        <div id="historyList"></div>
+      </div>
+    </div>
+    <nav class="tabbar" data-tab="mypage"></nav>
+  </section>
+
+</div>
+
+<script>
+/* ============================================================
+   음료 일러스트 — 카테고리별 색상만 바꿔 재사용
+   ============================================================ */
+function drink(d, opt){
+  opt = opt || {};
+  const id = 'g' + Math.random().toString(36).slice(2,8);
+  const boba = d.boba ? `
+    <circle cx="44" cy="118" r="5.4" fill="#4A2E1C"/><circle cx="56" cy="121" r="5.4" fill="#3E2617"/>
+    <circle cx="68" cy="118" r="5.4" fill="#4A2E1C"/><circle cx="50" cy="109" r="5.2" fill="#3E2617"/>
+    <circle cx="62" cy="110" r="5.2" fill="#4A2E1C"/><circle cx="74" cy="124" r="5" fill="#3E2617"/>
+    <circle cx="38" cy="125" r="5" fill="#4A2E1C"/>` : '';
+  const ice = d.ice ? `
+    <g fill="#FFFFFF" opacity=".34">
+      <rect x="40" y="52" width="20" height="17" rx="4" transform="rotate(-12 50 60)"/>
+      <rect x="58" y="66" width="19" height="16" rx="4" transform="rotate(9 67 74)"/>
+      <rect x="38" y="78" width="18" height="15" rx="4" transform="rotate(-6 47 85)"/>
+    </g>` : '';
+  const lemon = d.lemon ? `
+    <g transform="translate(52,44)">
+      <circle r="15" fill="#F7DC63" stroke="#E2C132" stroke-width="1.6"/>
+      <circle r="11" fill="#FDF0A8"/>
+      <g stroke="#EBCB4A" stroke-width="1.4">
+        <path d="M0-11V11M-11 0H11M-8-8 8 8M8-8-8 8"/>
+      </g>
+    </g>` : '';
+  const straw = d.straw ? `
+    <g fill="#C0453F" opacity=".55">
+      <circle cx="44" cy="70" r="3"/><circle cx="62" cy="84" r="2.6"/>
+      <circle cx="54" cy="58" r="2.4"/><circle cx="70" cy="66" r="2.8"/>
+      <circle cx="40" cy="96" r="2.6"/>
+    </g>` : '';
+  return `
+  <svg viewBox="0 0 112 150" xmlns="http://www.w3.org/2000/svg" ${opt.style ? 'style="'+opt.style+'"' : ''}>
+    <defs>
+      <linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${d.liquid[0]}"/>
+        <stop offset="100%" stop-color="${d.liquid[1]}"/>
+      </linearGradient>
+      <clipPath id="c${id}">
+        <path d="M28 34h56l-6 96a10 10 0 0 1-10 9.4H44a10 10 0 0 1-10-9.4z"/>
+      </clipPath>
+    </defs>
+    <ellipse cx="56" cy="141" rx="30" ry="5" fill="#000" opacity=".12"/>
+    <path d="M28 34h56l-6 96a10 10 0 0 1-10 9.4H44a10 10 0 0 1-10-9.4z" fill="#F3EDE6" opacity=".55"/>
+    <g clip-path="url(#c${id})">
+      <rect x="26" y="${d.fill || 42}" width="60" height="110" fill="url(#${id})"/>
+      ${boba}${ice}${straw}
+      <rect x="34" y="${(d.fill||42)}" width="10" height="105" fill="#fff" opacity=".22"/>
+    </g>
+    <path d="M28 34h56l-6 96a10 10 0 0 1-10 9.4H44a10 10 0 0 1-10-9.4z" fill="none" stroke="#FFFFFF" stroke-opacity=".75" stroke-width="2.4"/>
+    <ellipse cx="56" cy="34" rx="28" ry="6" fill="#FFFFFF" opacity=".8"/>
+    ${lemon}
+  </svg>`;
+}
+function thumb(d){ return `<div class="pour">${drink(d)}</div>`; }
+
+/* ============================================================
+   메뉴 데이터
+   ============================================================ */
+const CATEGORIES = ['Milk Tea','Smoothie','Ade','Coffee','Tea'];
+const MENU = [
+  {id:'taro',  name:'Taro Milk Tea',          cat:'Milk Tea', price:5300, boba:true,  liquid:['#EBDCF2','#C9AEDD'], desc:'고소한 타로와 부드러운 밀크티가 어우러진 진한 한 잔이에요.'},
+  {id:'black', name:'Black Milk Tea',         cat:'Milk Tea', price:4900, boba:true,  liquid:['#E3C7A2','#B98F63'], desc:'홍차의 깊은 향과 우유의 부드러움이 균형을 이룬 기본 메뉴예요.'},
+  {id:'brown', name:'Brown Sugar Bubble Tea', cat:'Milk Tea', price:5500, boba:true,  liquid:['#E8BE84','#A9702F'], desc:'직접 조린 흑당 시럽과 쫀득한 펄이 만나 진하게 달콤해요.'},
+  {id:'straw', name:'Strawberry Smoothie',    cat:'Smoothie', price:5800, straw:true, liquid:['#F5B0AA','#E4736C'], desc:'생딸기를 그대로 갈아 만든 상큼하고 시원한 스무디예요.'},
+  {id:'lemon', name:'Lemon Ade',              cat:'Ade',      price:4500, lemon:true, liquid:['#FBEDAE','#F4D75F'], desc:'상큼한 레몬과 에이드가 만나 청량한 맛을 즐겨보세요.'},
+  {id:'earl',  name:'Earl Grey Tea',          cat:'Tea',      price:4200, ice:true,   liquid:['#E5AE72','#B96F2E'], desc:'베르가못 향이 은은하게 퍼지는 아이스 얼그레이입니다.'},
+  {id:'ameri', name:'Iced Americano',         cat:'Coffee',   price:4500, ice:true,   liquid:['#8B5A32','#3B2416'], desc:'깔끔한 산미와 묵직한 바디가 살아있는 아이스 아메리카노예요.'},
+  {id:'latte', name:'Strawberry Latte',       cat:'Coffee',   price:6000, straw:true, liquid:['#FAD7D4','#EFA3A0'], desc:'딸기 과육과 우유를 층층이 쌓아 올린 달콤한 라떼예요.'},
+  {id:'mango', name:'Mango Smoothie',         cat:'Smoothie', price:5800, liquid:['#FBD98A','#F0A537'], desc:'잘 익은 망고를 갈아 만든 진하고 부드러운 스무디예요.'},
+  {id:'grape', name:'Grapefruit Ade',         cat:'Ade',      price:4800, ice:true, liquid:['#FBC0A8','#EE8262'], desc:'자몽의 쌉싸름한 끝맛이 기분 좋게 남는 에이드예요.'},
+  {id:'jasm',  name:'Jasmine Green Tea',      cat:'Tea',      price:4200, ice:true, liquid:['#DDE9BC','#A8C173'], desc:'은은한 재스민 향이 감도는 부드러운 녹차입니다.'},
+  {id:'matcha',name:'Matcha Milk Tea',        cat:'Milk Tea', price:5600, boba:true, liquid:['#DCE8C4','#96AF63'], desc:'우지 말차의 쌉싸름함과 우유의 단맛이 어우러진 메뉴예요.'}
+];
+const won = n => '₩' + n.toLocaleString('ko-KR');
+
+/* ============================================================
+   상태
+   ============================================================ */
+const state = {
+  category: 'Milk Tea',   // 시안과 동일하게 첫 진입은 전체 노출
+  firstLoad: true,
+  selected: MENU.find(m => m.id === 'lemon'),
+  size: 'Medium',
+  sweet: '50%',
+  cart: null,
+  orderType: '포장',
+  payment: '신용카드',
+  history: [
+    {name:'Lemonade',        date:'2026.07.25', price:4500, art:MENU.find(m=>m.id==='lemon')},
+    {name:'Iced Americano',  date:'2026.07.23', price:4500, art:MENU.find(m=>m.id==='ameri')},
+    {name:'Strawberry Latte',date:'2026.07.20', price:6000, art:MENU.find(m=>m.id==='latte')}
+  ]
+};
+
+/* ============================================================
+   화면 전환
+   ============================================================ */
+function go(name){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('is-active'));
+  document.getElementById('screen-' + name).classList.add('is-active');
+  document.querySelectorAll('.scroll').forEach(s => s.scrollTop = 0);
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-go]');
+  if (t) go(t.dataset.go);
+});
+
+/* ============================================================
+   탭바
+   ============================================================ */
+const ICONS = {
+  home:'<path d="M3 10.5 12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5h-4.5v-6h-6v6H4.5A1.5 1.5 0 0 1 3 20z"/>',
+  user:'<circle cx="12" cy="7.5" r="4"/><path d="M4.5 21c0-4.1 3.4-7.5 7.5-7.5s7.5 3.4 7.5 7.5z"/>',
+  cart:'<path d="M2.5 3.5h3l2.4 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5L21 7H6.4"/><circle cx="10" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/>'
+};
+document.querySelectorAll('.tabbar').forEach(bar => {
+  const cur = bar.dataset.tab;
+  bar.innerHTML = [
+    ['home','Home',ICONS.home],['mypage','My Page',ICONS.user],['cart','Cart',ICONS.cart]
+  ].map(([key,label,path]) => `
+    <button class="tab ${cur===key?'is-active':''}" data-go="${key}">
+      <svg viewBox="0 0 24 24" fill="${key==='cart'?'none':'currentColor'}" stroke="currentColor"
+           stroke-width="${key==='home'?0:1.9}" stroke-linecap="round" stroke-linejoin="round"
+           ${key==='user'?'fill="currentColor" stroke-width="0"':''}>${path}</svg>
+      <span>${label}</span>
+    </button>`).join('');
+});
+
+/* ============================================================
+   홈 — 카테고리 & 메뉴 렌더링
+   ============================================================ */
+const chipsEl = document.getElementById('chips');
+const gridEl  = document.getElementById('menuGrid');
+
+chipsEl.innerHTML = CATEGORIES.map(c =>
+  `<button class="chip ${c===state.category?'is-active':''}" data-cat="${c}">${c}</button>`).join('');
+
+function renderMenu(){
+  const list = state.firstLoad ? MENU.slice(0,6) : MENU.filter(m => m.cat === state.category);
+  gridEl.innerHTML = list.map(m => `
+    <article class="card" data-id="${m.id}">
+      <div class="thumb">${thumb(m)}</div>
+      <div class="body">
+        <h3>${m.name}</h3>
+        <div class="price">${won(m.price)}</div>
+        <button class="add" data-id="${m.id}" aria-label="${m.name} 담기">+</button>
+      </div>
+    </article>`).join('');
+}
+renderMenu();
+
+chipsEl.addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  state.category = chip.dataset.cat;
+  state.firstLoad = false;
+  chipsEl.querySelectorAll('.chip').forEach(c => c.classList.toggle('is-active', c === chip));
+  renderMenu();
+});
+
+gridEl.addEventListener('click', e => {
+  const card = e.target.closest('[data-id]');
+  if (!card) return;
+  openDetail(card.dataset.id);
+});
+
+/* ============================================================
+   상세 화면
+   ============================================================ */
+function openDetail(id){
+  const d = MENU.find(m => m.id === id);
+  state.selected = d; state.size = 'Medium'; state.sweet = '50%';
+  document.getElementById('detailHero').innerHTML = thumb(d);
+  document.getElementById('detailName').textContent  = d.name;
+  document.getElementById('detailPrice').textContent = won(d.price);
+  document.getElementById('detailDesc').textContent  = d.desc;
+  document.getElementById('detailTotal').textContent = won(d.price);
+  document.querySelectorAll('.segment').forEach(seg => {
+    const def = seg.dataset.group === 'size' ? 'Medium' : '50%';
+    seg.querySelectorAll('.seg').forEach(b => b.classList.toggle('is-active', b.dataset.value === def));
+  });
+  document.getElementById('favBtn').setAttribute('aria-pressed','false');
+  document.getElementById('favBtn').querySelector('svg').setAttribute('fill','none');
+  go('detail');
+}
+
+document.querySelectorAll('.segment').forEach(seg => {
+  seg.addEventListener('click', e => {
+    const b = e.target.closest('.seg');
+    if (!b) return;
+    seg.querySelectorAll('.seg').forEach(x => x.classList.toggle('is-active', x === b));
+    state[seg.dataset.group] = b.dataset.value;
+  });
+});
+
+document.getElementById('favBtn').addEventListener('click', e => {
+  const btn = e.currentTarget, on = btn.getAttribute('aria-pressed') === 'true';
+  btn.setAttribute('aria-pressed', String(!on));
+  btn.querySelector('svg').setAttribute('fill', on ? 'none' : 'currentColor');
+});
+
+document.getElementById('addToCart').addEventListener('click', () => {
+  state.cart = { item: state.selected, qty: 1, size: state.size, sweet: state.sweet };
+  renderCart();
+  go('cart');
+});
+
+/* ============================================================
+   장바구니
+   ============================================================ */
+function renderCart(){
+  const panel = document.getElementById('cartPanel');
+  if (!state.cart){
+    panel.innerHTML = `<p class="empty">장바구니가 비어 있어요.<br>메뉴에서 음료를 담아보세요.</p>`;
+    document.getElementById('payLabel').textContent = '결제하기';
+    return;
+  }
+  const { item, qty, size, sweet } = state.cart;
+  const total = item.price * qty;
+  panel.innerHTML = `
+    <div class="cart-item">
+      <div class="thumb">${thumb(item)}</div>
+      <div class="info">
+        <b>${item.name}</b>
+        <small>x${qty} · ${size} · 당도 ${sweet}</small>
+      </div>
+      <div class="amt">${won(item.price)}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="sum"><span>상품금액</span><span>${won(total)}</span></div>
+    <div class="sum total"><span>총 결제금액</span><b>${won(total)}</b></div>`;
+  document.getElementById('payLabel').textContent = won(total) + ' 결제하기';
+}
+renderCart();
+
+document.getElementById('orderType').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  e.currentTarget.querySelectorAll('button').forEach(x => x.classList.toggle('is-active', x === b));
+  state.orderType = b.dataset.value;
+});
+document.getElementById('payList').addEventListener('click', e => {
+  const b = e.target.closest('.pay'); if (!b) return;
+  e.currentTarget.querySelectorAll('.pay').forEach(x => {
+    const on = x === b;
+    x.classList.toggle('is-active', on);
+    x.querySelector('.radio').textContent = on ? '✓' : '';
+  });
+  state.payment = b.dataset.value;
+});
+
+/* ============================================================
+   결제 → 주문 완료
+   ============================================================ */
+document.getElementById('payBtn').addEventListener('click', () => {
+  if (!state.cart) return;
+  const { item, qty } = state.cart;
+  const total = item.price * qty;
+
+  document.getElementById('orderNo').textContent =
+    '#' + String(Math.floor(Math.random() * 9000) + 1000);
+  document.getElementById('doneThumb').innerHTML = thumb(item);
+  document.getElementById('doneName').textContent  = item.name;
+  document.getElementById('doneQty').textContent   = 'x' + qty;
+  document.getElementById('doneType').textContent  = state.orderType;
+  document.getElementById('donePrice').textContent = won(total);
+
+  const now = new Date();
+  const date = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+  state.history.unshift({ name:item.name, date, price:total, art:item });
+  renderHistory();
+
+  state.cart = null;
+  renderCart();
+  go('done');
+});
+
+/* ============================================================
+   마이페이지
+   ============================================================ */
+function renderHistory(){
+  document.getElementById('historyList').innerHTML = state.history.map(h => `
+    <div class="hist-item">
+      <div class="thumb">${thumb(h.art)}</div>
+      <div class="info">
+        <b>${h.name}</b>
+        <small>${h.date}</small>
+      </div>
+      <div class="amt">${won(h.price)}</div>
+    </div>`).join('');
+}
+renderHistory();
+</script>
+</body>
+</html>
