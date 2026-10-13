@@ -1,0 +1,29 @@
+# 환경 변수 — 절대 커밋하지 않습니다
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+
+# 에디터
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Vercel
+.vercel/
+
+# .env.example 은 여기에 넣지 않는다.
+# 키 이름만 담긴 예시 파일이라 저장소에 올라가야 하고,
+# README의 `cp .env.example .env` 안내와 제출 체크리스트가 이 파일을 전제한다.
+# 가려야 하는 것은 실제 값이 든 .env 뿐이며, 그건 맨 위에서 이미 무시하고 있다.
+.vercel
+
+# Claude Code 세션 도구 (로컬 미리보기 설정 등)
+.claude/

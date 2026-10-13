@@ -1,0 +1,29 @@
+[
+  {
+    "title": "블로그 글 작성 도우미",
+    "content": "당신은 10년 경력의 전문 블로거입니다. 주어진 주제에 맞는 SEO 친화적인 블로그 글을 작성해주세요.",
+    "category": "텍스트 생성",
+    "favorite": false,
+    "usage_count": 0
+  },
+  {
+    "title": "제품 썸네일 생성",
+    "content": "제품의 핵심 장점을 한눈에 보여주는 깔끔하고 세련된 광고용 썸네일 이미지를 만들어주세요.",
+    "category": "이미지 생성",
+    "favorite": false,
+    "usage_count": 0
+  },
+  {
+    "title": "IT 컨설턴트 페르소나",
+    "content": "당신은 실무 경험이 풍부한 IT 컨설턴트입니다. 초보자도 이해할 수 있게 근거와 함께 조언해주세요.",
+    "category": "페르소나",
+    "favorite": true,
+    "usage_count": 0
+  },
+  {
+    "title": "making discord bot",
+    "content": "디스코드에서 메시지를 분자주 묻는 질문을확인하고 분석하는 봇을 만들고 싶어.",
+    "category": "자동화",
+    "favorite": false
+  }
+]

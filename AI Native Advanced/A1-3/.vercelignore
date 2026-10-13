@@ -1,0 +1,19 @@
+# 배포에 올라가면 안 되는 것 / 올릴 필요 없는 것
+
+# 실제 키가 든 파일 — 절대 업로드 금지
+.env
+.env.local
+.env.*.local
+
+# 기획 문서 (서비스 동작과 무관, 용량만 차지)
+commit-rescure-v1.4/
+
+# 개발용
+.git/
+.claude/
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# 테스트 (node --test 로만 돌린다. 배포본에서 부르는 곳이 없다)
+tests/

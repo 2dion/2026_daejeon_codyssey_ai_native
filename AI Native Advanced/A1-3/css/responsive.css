@@ -1,0 +1,129 @@
+/* ==========================================================================
+   커밋구조대 — responsive.css
+   모바일 ~767px / 태블릿 768~1023px / 데스크톱 1024px~
+   검증 기준 폭: 375px, 768px, 1280px
+   ========================================================================== */
+
+/* ------------------------- 태블릿 이하 (~1023px) ------------------------- */
+@media (max-width: 1023px) {
+  .result__cols { grid-template-columns: minmax(0, 1fr); }
+  .preset-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .footer__inner { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ------------------------- 태블릿 (768~1023px) ------------------------- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nav__link { padding: 8px 9px; font-size: .87rem; }
+  .theme-toggle__text { display: none; }
+}
+
+/* --------------------------- 모바일 (~767px) --------------------------- */
+@media (max-width: 767px) {
+  :root { --nav-h: 56px; }
+
+  .section { padding: 48px 0; }
+  .section__title { font-size: 1.55rem; }
+  .wrap { padding: 0 16px; }
+
+  /* 햄버거 메뉴 */
+  .nav__toggle { display: block; }
+  .nav__menu {
+    position: absolute; left: 0; right: 0; top: var(--nav-h);
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    padding: 8px 16px 16px;
+    max-height: calc(100vh - var(--nav-h));
+    overflow-y: auto;
+    display: none;
+  }
+  .nav__menu.is-open { display: flex; }
+  .nav__menu ul { flex-direction: column; gap: 2px; }
+  .nav__link { padding: 13px 12px; font-size: 1rem; }
+  .theme-toggle { margin: 10px 0 0; justify-content: center; }
+  .theme-toggle__text { display: inline; }
+
+  /* 무대 — 좁은 화면에서는 여백을 줄이고 그림에 높이를 더 준다 */
+  .section--stage { padding: 12px 0 20px; }
+  .stage { gap: 8px; }
+  .stage__picker { padding: 8px; }
+  .pill { font-size: .84rem; padding: 6px 10px; }
+  .pill__ko { font-size: .76rem; }
+
+  /* 다이어그램 — 좁은 화면에서는 폭에 맞춰 줄이면 글자가 8px까지 작아져 읽을 수 없다.
+     그래서 억지로 줄이지 않고 최소 폭을 보장한 뒤 그림만 가로로 넘긴다.
+     대신 "내 컴퓨터 / GitHub" 경계는 sticky 범례로 항상 보이게 유지한다 (기획서 8.1절의 취지). */
+  .boundary-legend { display: flex; }
+  .diagram-wrap {
+    padding: 8px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+  }
+  .areas {
+    /* 660 = viewBox 폭. 1:1 로 그려야 아래 px 값이 화면에서도 그대로 나온다.
+       560 으로 줄이면 0.85배가 걸려 13.5px 라벨이 11.5px 로 떨어졌다. */
+    min-width: 660px;
+    max-height: calc(100dvh - var(--nav-h) - 160px);
+    min-height: 280px;
+  }
+  /* 축소된 만큼 글자를 키워 가독성을 맞춘다 (viewBox 단위) */
+  .area__name { font-size: 17px; }
+  .area__name--sm { font-size: 15px; }
+  .area__sub { font-size: 14px; }
+  .flow__label { font-size: 14px; }
+  .areas__container-label { font-size: 16px; }
+  .areas__net text { font-size: 14px; }
+  .head-chip text { font-size: 14px; }
+
+  /* 쉬운 말 사전 */
+  .words { grid-template-columns: minmax(0, 1fr); }
+  .gitvs { grid-template-columns: minmax(0, 1fr); }
+  .gitvs__item { padding: 16px; }
+
+  /* 카드 */
+  .preset-grid { grid-template-columns: minmax(0, 1fr); }
+  .cmd__toggle { padding: 12px 14px; }
+  .cmd__body { padding: 0 14px 14px; }
+
+  /* 폼 */
+  .ai-box { padding: 18px 16px; }
+  .form__actions .btn { flex: 1 1 100%; }
+  .field--radio { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+  /* 결과 */
+  .result__head, .result__body { padding: 18px 16px; }
+  .result__summary { font-size: 1.02rem; }
+  .step { padding: 13px 14px 13px 46px; }
+  .step__cmd { flex-direction: column; }
+  .step__cmd code { width: 100%; }
+
+  /* V2 그래프는 축소하지 않고 가로 스크롤 (라벨 가독성 우선) */
+  .graph-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .commit-graph { min-width: 320px; }
+
+  .gate { padding: 15px 14px; }
+  .gate__step { padding: 11px 12px 11px 42px; }
+
+
+  .footer { padding: 32px 0 44px; }
+}
+
+/* ---------------------------- 초소형 (~380px) ---------------------------- */
+@media (max-width: 380px) {
+  .nav__brand span:last-child { font-size: .95rem; }
+  .badge { font-size: .8rem; }
+  .stage__title { font-size: 1.2rem; }
+}
+
+/* --------------------------- 데스크톱 (1024px~) --------------------------- */
+@media (min-width: 1024px) {
+  .theme-toggle__text { display: inline; }
+  .diagram-wrap { padding: 14px 20px; }
+  .areas { max-width: 700px; }
+
+  /* 폭이 남는 화면에서는 명령어를 제목 옆으로 올린다.
+     접힌 줄 높이가 절반이 되고, 오른쪽에 모여 카드끼리 세로로 맞아떨어진다. */
+  .cmd__toggle { grid-template-columns: auto minmax(0, 1fr) auto auto; }
+  .cmd__toggle .cmd__code { grid-column: 3; grid-row: 1; justify-self: end; }
+}

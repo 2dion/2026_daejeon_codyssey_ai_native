@@ -1,0 +1,519 @@
+/* ==========================================================================
+   lab.css — Git 실습실
+
+   색 변수는 style.css 것을 그대로 쓴다. 로컬 = 청록, GitHub = 보라라는
+   기존 약속을 실습실에서도 깨지 않는다.
+
+   색만으로 구분되는 것을 만들지 않는다. 기호(▲ = · + ~)와 선 종류(점선)를
+   함께 쓴다 — 흑백 출력과 색각 이상에서도 읽혀야 한다.
+   ========================================================================== */
+
+.lab__lead {
+  max-width: 62ch;
+  color: var(--fg-muted);
+  margin-bottom: 26px;
+}
+
+/* ------------------------------ 시나리오 고르기 ------------------------------ */
+
+.lab__pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.lab__pickfield { flex: 1 1 320px; }
+.lab__pickfield select {
+  font: inherit;
+  padding: 10px 12px;
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+.lab__pickbtns { display: flex; flex-wrap: wrap; gap: 8px; }
+.lab__pickbtns .btn { text-decoration: none; }
+
+/* --------------------------------- 상황 안내 --------------------------------- */
+
+.brief {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-bottom: 22px;
+}
+.brief__title { font-size: 1.18rem; margin: 0 0 2px; }
+.brief__sub { color: var(--fg-muted); font-size: .88rem; margin: 0 0 12px; }
+.brief__situation { margin: 0 0 8px; }
+.brief__goal { margin: 0; }
+.brief__label {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: .76rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-right: 6px;
+}
+.brief__done {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  background: var(--risk-safe-bg);
+  color: var(--risk-safe-fg);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+}
+.brief__done::before { content: "✓ "; }
+
+.brief__hints { margin-top: 14px; }
+.brief__hints summary { cursor: pointer; font-weight: 700; font-size: .9rem; }
+.brief__hintnote { color: var(--fg-muted); font-size: .85rem; margin: 10px 0; }
+.brief__hintlist { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+
+/* ------------------------- 세 개의 main — 실습실의 얼굴 ------------------------- */
+
+.three-mains {
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 26px;
+  background: var(--bg-card);
+}
+.three-mains__title { font-size: 1.02rem; margin: 0 0 12px; }
+.three-mains__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.three-mains__item {
+  display: grid;
+  gap: 3px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+}
+/* 색 말고도 알 수 있게 왼쪽 굵은 선의 유무로 구분한다 */
+.three-mains__item.is-diff { border-left: 4px solid var(--svg-node-hi); }
+.three-mains__item.is-same { border-left: 4px solid var(--border-strong); }
+
+.three-mains__name { font-family: var(--mono); font-weight: 800; font-size: .95rem; }
+.three-mains__where { font-size: .76rem; color: var(--fg-muted); }
+.three-mains__id {
+  font-family: var(--mono);
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+.three-mains__note { font-size: .78rem; color: var(--fg-faint); }
+.three-mains__hint {
+  margin: 14px 0 0;
+  font-size: .88rem;
+  color: var(--fg-muted);
+}
+
+/* -------------------------------- 작업 공간 탭 -------------------------------- */
+
+.wtabs { margin-bottom: 18px; }
+.wtabs__label { font-size: .82rem; color: var(--fg-muted); margin: 0 0 8px; }
+.wtabs__row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.wtab {
+  display: grid;
+  gap: 1px;
+  text-align: left;
+  font: inherit;
+  padding: 8px 14px;
+  background: var(--bg-card);
+  color: var(--fg-muted);
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 3px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.wtab:hover { border-color: var(--accent); }
+/* 지금 보고 있는 폴더는 색 말고 아래 굵은 선으로도 구분한다 */
+.wtab.is-active {
+  color: var(--fg);
+  background: var(--svg-local-bg);
+  border-color: var(--c-local-1);
+}
+.wtab__path { font-family: var(--mono); font-size: .84rem; font-weight: 700; }
+.wtab__branch { font-size: .72rem; color: var(--fg-faint); }
+.wtab__branch::before { content: "작업본 "; }
+
+/* --------------------------------- 충돌 해결 --------------------------------- */
+
+/* 빨강이 아니라 노랑이다. 충돌은 실패가 아니라 "지금 손봐야 하는 것"이기 때문이다. */
+.conflict {
+  border: 2px solid var(--risk-warn-fg);
+  background: var(--risk-warn-bg);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 22px;
+}
+.conflict__title { font-size: 1.05rem; margin: 0 0 8px; }
+.conflict__title::before { content: "▲ "; }
+.conflict__lead { font-size: .88rem; margin: 0 0 16px; }
+.conflict__next { font-size: .85rem; margin: 14px 0 0; }
+
+.conflict--done { border-color: var(--risk-safe-fg); background: var(--risk-safe-bg); }
+.conflict--done .conflict__title::before { content: "✓ "; }
+.conflict--done p { margin: 0; font-size: .88rem; }
+
+.conflict__file {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+.conflict__name { margin: 0 0 8px; font-weight: 700; }
+.conflict__actions { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+
+.conflict__body {
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  font-size: .78rem;
+  line-height: 1.5;
+}
+.conflict__body code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+/* 어느 줄이 누구 것인지 색 말고도 왼쪽 표시로 알 수 있게 한다 */
+.cline { display: block; }
+.cline__mark {
+  display: inline-block;
+  width: 2.1em;
+  color: var(--fg-faint);
+  font-weight: 700;
+  user-select: none;
+}
+.cline.is-marker { color: var(--fg-faint); }
+.cline.is-ours { background: color-mix(in srgb, var(--c-local-1) 14%, transparent); }
+.cline.is-theirs { background: color-mix(in srgb, var(--c-remote-1) 14%, transparent); }
+.cline.is-ours .cline__mark { color: var(--c-local-1); }
+.cline.is-theirs .cline__mark { color: var(--c-remote-1); }
+
+/* ---------------------------------- 상태판 ---------------------------------- */
+
+.board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 300px);
+  gap: 0;
+  align-items: stretch;
+  margin-bottom: 30px;
+}
+
+.zone {
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 16px 18px 18px;
+  min-width: 0;
+}
+.zone--local { background: var(--svg-local-bg); border-color: var(--c-local-1); }
+.zone--remote { background: var(--svg-remote-bg); border-color: var(--c-remote-1); }
+
+.zone__title {
+  font-size: .95rem;
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.zone__icon { font-size: 1.05rem; }
+.zone__panels { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.zone--remote .zone__panels { grid-template-columns: 1fr; }
+.zone__collab { margin-top: 14px; width: 100%; }
+
+/* 경계는 장식이 아니다. 여기를 넘는 명령이 fetch/push 뿐이라는 것이 요점이다. */
+.board__boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+.board__boundary span {
+  writing-mode: vertical-rl;
+  font-size: .72rem;
+  letter-spacing: .12em;
+  color: var(--fg-faint);
+  border-left: 2px dashed var(--border-strong);
+  border-right: 2px dashed var(--border-strong);
+  padding: 18px 5px;
+}
+
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  min-width: 0;
+}
+.panel--wide { grid-column: 1 / -1; }
+.panel__title { font-size: .84rem; margin: 0 0 10px; }
+.panel__sub { font-weight: 400; color: var(--fg-faint); font-size: .76rem; }
+.panel__empty { color: var(--fg-faint); font-size: .82rem; margin: 0; }
+.panel__meta {
+  font-family: var(--mono);
+  font-size: .74rem;
+  color: var(--fg-muted);
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+}
+.panel__legend { font-size: .76rem; color: var(--fg-muted); margin: 10px 0 0; }
+.panel__action {
+  font: inherit;
+  font-size: .8rem;
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: var(--bg-alt);
+  color: var(--fg-muted);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.panel__action:hover { color: var(--fg); border-color: var(--accent); }
+
+/* ------------------------------- 파일 목록 ------------------------------- */
+
+.filelist { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+
+.filerow {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  font-size: .82rem;
+}
+.filerow__mark { font-family: var(--mono); font-weight: 800; color: var(--fg-faint); }
+.filerow__name { font-family: var(--mono); overflow-wrap: anywhere; }
+.filerow__state { font-size: .72rem; color: var(--fg-faint); white-space: nowrap; }
+.filerow__edit {
+  grid-column: 3;
+  font: inherit;
+  font-size: .72rem;
+  padding: 2px 8px;
+  background: transparent;
+  color: var(--accent-strong);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.filerow__edit:hover { border-color: var(--accent); }
+
+.filerow.is-untracked .filerow__mark { color: var(--risk-warn-fg); }
+.filerow.is-modified .filerow__mark { color: var(--risk-danger-fg); }
+.filerow.is-staged .filerow__mark { color: var(--accent); }
+
+/* ---------------------------------- 터미널 ---------------------------------- */
+
+.terminal { margin-top: 8px; }
+
+.terminal__log {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  max-height: 460px;
+  overflow-y: auto;
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+/* grid 자식은 기본 min-width 가 auto 라 내용보다 작아지지 않는다.
+   그대로 두면 긴 터미널 출력이 기록 전체를 옆으로 밀어, 블록마다 따로 스크롤되지 않고
+   기록 창이 통째로 가로 스크롤된다. 0 으로 풀어야 아래 overflow-x 가 실제로 걸린다. */
+.terminal__log > * { min-width: 0; }
+
+.tline {
+  min-width: 0;
+  border-left: 3px solid var(--border-strong);
+  padding-left: 12px;
+}
+.tline.is-error { border-left-color: var(--risk-danger-fg); }
+/* 충돌은 실패가 아니라 사람에게 넘어온 것이다. 빨강으로 칠하면 뭔가 잘못했다고 읽힌다. */
+.tline.is-conflict { border-left-color: var(--risk-warn-fg); }
+.tline--note { border-left-style: dashed; border-left-color: var(--accent); }
+
+.tline__cmd {
+  font-family: var(--mono);
+  font-size: .86rem;
+  font-weight: 700;
+  margin: 0 0 6px;
+  overflow-wrap: anywhere;
+}
+.tline__prompt { color: var(--fg-faint); }
+
+.tline__out {
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  font-size: .78rem;
+  line-height: 1.55;
+  white-space: pre;
+}
+.tline__out code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.tline__say { margin: 0 0 8px; font-size: .86rem; }
+.tline__areas { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.tscene { margin-bottom: 12px; }
+.tscene:last-child { margin-bottom: 0; }
+.tscene__title {
+  font-size: .78rem;
+  font-weight: 800;
+  color: var(--accent-strong);
+  margin: 0 0 6px;
+}
+
+/* ------------------------------- 명령 입력줄 ------------------------------- */
+
+.terminal__form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.terminal__prompt {
+  font-family: var(--mono);
+  font-weight: 800;
+  color: var(--fg-faint);
+}
+/* 목록을 입력창 바로 아래에 띄우려면 기준이 될 상자가 필요하다 */
+.terminal__inputwrap { position: relative; flex: 1 1 auto; min-width: 0; }
+
+.terminal__form input {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: .92rem;
+  padding: 10px 12px;
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+.terminal__form input:focus-visible { border-color: var(--accent); }
+
+.terminal__help { font-size: .8rem; color: var(--fg-muted); margin: 8px 0 0; }
+.terminal__help kbd {
+  font-family: var(--mono);
+  font-size: .9em;
+  padding: 1px 5px;
+  background: var(--bg-code);
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+}
+.terminal__helpnote { display: block; color: var(--fg-faint); margin-top: 2px; }
+
+/* ------------------------------- 자동 완성 목록 ------------------------------- */
+
+.suggest {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  max-height: 320px;
+  overflow-y: auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+}
+
+.suggest__item {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  grid-template-areas: "cmd desc" "cmd area";
+  align-items: baseline;
+  column-gap: 12px;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+.suggest__item.is-active { background: var(--accent-soft); border-left-color: var(--accent); }
+.suggest__item:hover { background: var(--bg-alt); }
+
+.suggest__cmd {
+  grid-area: cmd;
+  font-family: var(--mono);
+  font-size: .84rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.suggest__cmd mark {
+  background: none;
+  color: var(--accent-strong);
+  text-decoration: underline;
+}
+.suggest__desc { grid-area: desc; font-size: .78rem; color: var(--fg-muted); }
+.suggest__area { grid-area: area; font-size: .72rem; color: var(--fg-faint); }
+.suggest__warn {
+  color: var(--risk-danger-fg);
+  font-weight: 800;
+}
+.suggest__warn::before { content: "▲ "; }
+
+.lab__limits { margin-top: 24px; }
+
+/* -------------------------------- 애니메이션 -------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal__log { scroll-behavior: auto; }
+}
+
+/* --------------------------------- 좁은 화면 --------------------------------- */
+
+@media (max-width: 900px) {
+  /* 세로로 쌓되 "내 컴퓨터 → 경계 → GitHub" 순서와 제목은 계속 보이게 한다.
+     경계가 사라지면 이 화면의 요점이 사라진다. */
+  .board { grid-template-columns: 1fr; gap: 10px; }
+  .board__boundary { padding: 2px 0; }
+  .board__boundary span {
+    writing-mode: horizontal-tb;
+    border: 0;
+    border-top: 2px dashed var(--border-strong);
+    border-bottom: 2px dashed var(--border-strong);
+    padding: 6px 0;
+    width: 100%;
+    text-align: center;
+  }
+  .three-mains__list { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  .zone__panels { grid-template-columns: 1fr; }
+  .terminal__form { flex-wrap: wrap; }
+  .terminal__inputwrap { flex: 1 1 100%; }
+  .terminal__prompt { display: none; }
+
+  /* 좁은 화면에서는 명령과 설명을 세로로 쌓는다. 옆으로 붙이면 명령이 잘린다 */
+  .suggest__item {
+    grid-template-columns: 1fr;
+    grid-template-areas: "cmd" "desc" "area";
+    row-gap: 0;
+    line-height: 1.4;      /* 세 줄이 되므로 본문 행간(1.7)이면 한 항목이 너무 높아진다 */
+  }
+  .suggest__cmd { white-space: normal; overflow-wrap: anywhere; }
+  .lab__pickbtns { width: 100%; }
+  .lab__pickbtns .btn { flex: 1 1 auto; text-align: center; }
+}
