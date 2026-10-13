@@ -1,0 +1,14 @@
+.env
+.venv/
+.playwright-cli/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+backend/.env
+frontend/dist/
+.vercel/
+.secrets/
+codyssey-native-m1-2-firebase-adminsdk-fbsvc-ad5976c313.json
+.DS_Store

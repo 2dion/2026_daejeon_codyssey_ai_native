@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="취업준비생의 소비 데이터를 분석하는 AI 소비 비서" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <title>내돈비서</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand" aria-label="내돈비서 홈">
+          <span class="brand-mark" aria-hidden="true">₩</span>
+          <div><strong>내돈비서</strong><small>취준생 소비 분석</small></div>
+        </div>
+        <nav class="primary-nav" aria-label="주요 메뉴">
+          <button class="nav-item active" data-view="dashboard"><span aria-hidden="true">◫</span> 대시보드</button>
+          <button class="nav-item" data-view="transactions"><span aria-hidden="true">↕</span> 거래 관리</button>
+          <button class="nav-item" data-view="chat"><span aria-hidden="true">✦</span> AI 상담</button>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="server-state"><span class="status-dot" id="statusDot"></span><span id="serverStatus">서버 확인 중</span></div>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="다크 모드 전환">◐ <span>화면 테마</span></button>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div><p class="eyebrow">2026년 여름 소비 리포트</p><h1 id="pageTitle">한눈에 보는 내 소비</h1></div>
+          <div class="top-actions">
+            <button class="secondary-button" id="wakeServerButton" type="button">서버 깨우기</button>
+            <button class="secondary-button" id="exportButton" type="button">CSV 내보내기</button>
+            <button class="primary-button" id="addTransactionButton" type="button">+ 거래 추가</button>
+          </div>
+        </header>
+
+        <div class="notice hidden" id="notice" role="status"></div>
+
+        <section class="view active" id="dashboardView" data-page-title="한눈에 보는 내 소비">
+          <form class="filter-bar" id="filterForm">
+            <label>시작일<input type="date" name="start_date" value="2026-06-01" /></label>
+            <label>종료일<input type="date" name="end_date" /></label>
+            <label>카테고리<select name="category" id="filterCategory"><option value="">전체 카테고리</option></select></label>
+            <button class="secondary-button" type="submit">적용</button>
+            <button class="text-button" id="resetFilter" type="button">초기화</button>
+          </form>
+
+          <div class="metric-grid" aria-live="polite">
+            <article class="metric-card accent-green"><span class="metric-label">총수입 <button class="info-button" type="button" data-metric-info="income" aria-label="총수입 설명">i</button></span><strong id="totalIncome">—</strong><small id="incomeCount">수입 거래</small></article>
+            <article class="metric-card accent-coral"><span class="metric-label">총지출 <button class="info-button" type="button" data-metric-info="expense" aria-label="총지출 설명">i</button></span><strong id="totalExpense">—</strong><small id="expenseCount">지출 거래</small></article>
+            <article class="metric-card accent-purple"><span class="metric-label">남은 금액 <button class="info-button" type="button" data-metric-info="balance" aria-label="남은 금액 설명">i</button></span><strong id="balance">—</strong><small id="periodLabel">조회 기간</small></article>
+            <article class="metric-card accent-blue"><span class="metric-label">최근 흐름 <button class="info-button" type="button" data-metric-info="trend" aria-label="최근 흐름 설명">i</button></span><strong class="text-metric" id="trend">—</strong><small>전월 대비 소비</small></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel chart-panel">
+              <div class="panel-heading"><div><p class="eyebrow">CASH FLOW</p><h2>월별 수입과 지출</h2><p class="filter-context" id="cashflowFilterContext">전체 기간 · 전체 카테고리</p></div></div>
+              <div class="chart-frame"><div class="chart-loader" id="chartLoader">그래프를 만드는 중입니다…</div><img id="cashflowChart" alt="월별 수입과 지출 그래프" /></div>
+            </article>
+            <article class="panel insight-panel">
+              <div class="panel-heading"><div><p class="eyebrow">KEY RATIOS</p><h2>소비 건강 지표</h2><p class="filter-context" id="ratiosFilterContext">전체 기간 · 전체 카테고리</p></div></div>
+              <div class="ratio-list">
+                <div><span class="metric-label">엥겔지수 <button class="info-button" type="button" data-metric-info="engel" aria-label="엥겔지수 설명">i</button></span><strong id="engelIndex">—</strong><div class="progress"><i id="engelBar"></i></div></div>
+                <div><span class="metric-label">주거비 비중 <button class="info-button" type="button" data-metric-info="housing" aria-label="주거비 비중 설명">i</button></span><strong id="housingRatio">—</strong><div class="progress"><i id="housingBar"></i></div></div>
+                <div><span class="metric-label">고정비 부담률 <button class="info-button" type="button" data-metric-info="fixed" aria-label="고정비 부담률 설명">i</button></span><strong id="fixedRatio">—</strong><div class="progress"><i id="fixedBar"></i></div></div>
+                <div><span class="metric-label">선택소비 비중 <button class="info-button" type="button" data-metric-info="discretionary" aria-label="선택소비 비중 설명">i</button></span><strong id="discretionaryRatio">—</strong><div class="progress"><i id="discretionaryBar"></i></div></div>
+              </div>
+            </article>
+            <article class="panel category-panel">
+              <div class="panel-heading"><div><p class="eyebrow">TOP CATEGORIES</p><h2>카테고리별 지출</h2></div><div class="propensity-label"><strong id="propensity">소비성향 —</strong><button class="info-button" type="button" data-metric-info="propensity" aria-label="평균소비성향 설명">i</button></div></div>
+              <div id="categoryBreakdown" class="category-breakdown"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="transactionsView" data-page-title="거래 내역 관리">
+          <article class="panel table-panel">
+            <div class="panel-heading"><div><p class="eyebrow">TRANSACTIONS</p><h2>저장된 거래 <span id="transactionTotal" class="count-pill">0건</span></h2></div></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>날짜</th><th>내용</th><th>카테고리</th><th>구분</th><th class="number">금액</th><th>관리</th></tr></thead>
+                <tbody id="transactionTable"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <section class="view" id="chatView" data-page-title="데이터 기반 AI 상담">
+          <div class="chat-layout">
+            <aside class="history-panel panel">
+              <div class="panel-heading"><h2>대화 기록</h2><button class="icon-button" id="newConversationButton" type="button" title="새 대화">＋</button></div>
+              <div id="conversationList" class="conversation-list"></div>
+            </aside>
+            <article class="chat-panel panel">
+              <div class="chat-header">
+                <div><span class="assistant-avatar">₩</span><div><h2>소비 분석 비서</h2><small>계산 질문은 AI 토큰 없이 답합니다</small></div></div>
+                <div class="conversation-usage"><span>현재 대화 API 사용량</span><strong id="conversationTokens">0 tokens</strong></div>
+              </div>
+              <div class="messages" id="messages" aria-live="polite">
+                <div class="empty-chat"><span>✦</span><h3>소비 데이터에 대해 물어보세요</h3><p>“7월 총지출은?”은 직접 계산하고,<br />“소비 습관을 평가해줘”는 AI가 분석합니다.</p></div>
+              </div>
+              <form class="chat-form" id="chatForm">
+                <label class="sr-only" for="chatInput">질문 입력</label>
+                <textarea id="chatInput" rows="1" maxlength="500" placeholder="내 소비에 대해 질문해보세요" required></textarea>
+                <button class="send-button" type="submit" aria-label="질문 보내기">↑</button>
+              </form>
+              <p class="chat-hint">Enter로 전송 · Shift+Enter로 줄바꿈</p>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="transactionDialog">
+      <form method="dialog" class="dialog-card" id="transactionForm">
+        <div class="dialog-heading"><div><p class="eyebrow">TRANSACTION</p><h2 id="dialogTitle">거래 추가</h2></div><button class="icon-button dialog-close" type="button" aria-label="닫기">×</button></div>
+        <input type="hidden" name="id" />
+        <div class="form-grid">
+          <label>날짜<input type="date" name="date" required /></label>
+          <label>금액<input type="number" name="value" min="1" max="1000000000" required placeholder="예: 7500" /></label>
+          <label class="span-2">메모<input type="text" name="memo" maxlength="200" required placeholder="예: 점심 백반" /></label>
+          <label>구분<select name="type" required><option value="expense">지출</option><option value="income">수입</option></select></label>
+          <label>카테고리<select name="category" id="formCategory" required></select></label>
+          <label class="check-label"><input type="checkbox" name="is_fixed" /> 고정비</label>
+          <label class="check-label"><input type="checkbox" name="is_essential" /> 필수소비</label>
+        </div>
+        <div class="dialog-actions"><button class="secondary-button dialog-close" type="button">취소</button><button class="primary-button" id="saveTransactionButton" type="submit">저장</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="metricInfoDialog">
+      <article class="dialog-card">
+        <div class="dialog-heading"><div><p class="eyebrow">METRIC GUIDE</p><h2 id="metricInfoTitle">지표 설명</h2></div><button class="icon-button metric-info-close" type="button" aria-label="닫기">×</button></div>
+        <p class="metric-info-description" id="metricInfoDescription"></p>
+        <div class="metric-formula"><strong>계산 기준</strong><span id="metricInfoFormula"></span></div>
+        <div class="dialog-actions"><button class="primary-button metric-info-close" type="button">확인</button></div>
+      </article>
+    </dialog>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

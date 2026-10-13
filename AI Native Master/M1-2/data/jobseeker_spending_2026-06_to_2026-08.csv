@@ -1,0 +1,181 @@
+date,value,memo,type,category,is_fixed,is_essential
+2026-06-01,300000,부모님 생활비 지원,income,용돈,false,false
+2026-06-01,450000,원룸 월세,expense,주거,true,true
+2026-06-01,1500,도서관 이동,expense,교통,false,true
+2026-06-02,7500,점심 백반,expense,식비,false,true
+2026-06-02,3200,스터디 중 아메리카노,expense,카페·간식,false,false
+2026-06-03,110000,취업 준비 독서실 이용료,expense,교육·취업,true,true
+2026-06-03,18500,일주일 장보기,expense,식비,false,true
+2026-06-04,25000,취업용 증명사진 촬영,expense,교육·취업,false,true
+2026-06-04,8500,저녁 도시락,expense,식비,false,true
+2026-06-04,1500,취업 스터디 이동,expense,교통,false,true
+2026-06-05,9000,분식으로 점심,expense,식비,false,true
+2026-06-05,8500,취업 준비 교재 구입,expense,교육·취업,false,true
+2026-06-06,4500,아르바이트 전 간식,expense,카페·간식,false,false
+2026-06-06,7900,세제와 휴지 구입,expense,생활,false,true
+2026-06-07,7800,아르바이트 중 식사,expense,식비,false,true
+2026-06-07,3100,아르바이트 왕복 교통,expense,교통,false,true
+2026-06-08,39000,휴대폰 요금,expense,통신,true,true
+2026-06-08,22300,달걀과 채소 구입,expense,식비,false,true
+2026-06-09,39000,취업 준비 온라인 강의,expense,교육·취업,false,true
+2026-06-09,11000,스터디 후 저녁,expense,식비,false,true
+2026-06-10,920000,주말 아르바이트 급여,income,아르바이트,false,false
+2026-06-10,3800,자기소개서 작성 중 커피,expense,카페·간식,false,false
+2026-06-10,1500,교육장 이동,expense,교통,false,true
+2026-06-11,10900,취업 문서용 클라우드 구독,expense,구독,true,false
+2026-06-11,6500,편의점 간편식,expense,식비,false,true
+2026-06-11,15000,친구와 영화 관람,expense,여가,false,false
+2026-06-12,27900,쌀과 반찬 재료 구입,expense,식비,false,true
+2026-06-13,8500,점심 국밥,expense,식비,false,true
+2026-06-13,5200,스터디 모임 음료,expense,카페·간식,false,false
+2026-06-13,3000,채용설명회 왕복 교통,expense,교통,false,true
+2026-06-14,9500,집 근처 저녁 식사,expense,식비,false,true
+2026-06-14,12500,생활용품 보충,expense,생활,false,true
+2026-06-15,55000,원룸 관리비,expense,주거,true,true
+2026-06-15,7200,자기소개서 출력,expense,교육·취업,false,true
+2026-06-16,7200,샌드위치 점심,expense,식비,false,true
+2026-06-16,1500,아르바이트 출근,expense,교통,false,true
+2026-06-17,15600,과일과 우유 구입,expense,식비,false,true
+2026-06-17,3000,도서관 휴식 간식,expense,카페·간식,false,false
+2026-06-18,10500,취업 스터디 후 식사,expense,식비,false,true
+2026-06-18,12000,모의면접 스터디 회비,expense,교육·취업,false,true
+2026-06-19,8000,아르바이트 중 점심,expense,식비,false,true
+2026-06-19,1500,스터디 모임 이동,expense,교통,false,true
+2026-06-20,24500,전기요금,expense,주거,true,true
+2026-06-21,12800,감기 진료 후 약 구입,expense,의료,false,true
+2026-06-21,4100,면접 준비 중 커피,expense,카페·간식,false,false
+2026-06-22,8900,덮밥으로 저녁,expense,식비,false,true
+2026-06-22,3100,아르바이트 왕복 교통,expense,교통,false,true
+2026-06-23,31800,주말 식재료 장보기,expense,식비,false,true
+2026-06-24,7600,김밥과 음료,expense,식비,false,true
+2026-06-25,18300,가스와 수도요금,expense,주거,true,true
+2026-06-25,4900,주말 카페 음료,expense,카페·간식,false,false
+2026-06-25,1500,면접 준비 모임 이동,expense,교통,false,true
+2026-06-26,9200,주말 점심 식사,expense,식비,false,true
+2026-06-26,9900,주말 취미 활동,expense,여가,false,false
+2026-06-27,5400,쓰레기봉투 구입,expense,생활,false,true
+2026-06-28,6800,간단한 저녁 식사,expense,식비,false,true
+2026-06-28,3000,월말 아르바이트 왕복 교통,expense,교통,false,true
+2026-06-29,20400,간편식과 생필 식재료 구입,expense,식비,false,true
+2026-06-29,3500,월말 공부 간식,expense,카페·간식,false,false
+2026-06-30,10800,월말 스터디 식사,expense,식비,false,true
+2026-07-01,320000,부모님 생활비 지원,income,용돈,false,false
+2026-07-01,450000,원룸 월세,expense,주거,true,true
+2026-07-01,1700,도서관 이동,expense,교통,false,true
+2026-07-02,7900,점심 백반,expense,식비,false,true
+2026-07-02,3500,스터디 중 아메리카노,expense,카페·간식,false,false
+2026-07-03,110000,취업 준비 독서실 이용료,expense,교육·취업,true,true
+2026-07-03,45000,자격증 시험 응시료,expense,교육·취업,false,true
+2026-07-03,19400,일주일 장보기,expense,식비,false,true
+2026-07-04,8900,저녁 도시락,expense,식비,false,true
+2026-07-04,1700,취업 스터디 이동,expense,교통,false,true
+2026-07-05,9500,분식으로 점심,expense,식비,false,true
+2026-07-05,8500,취업 준비 교재 구입,expense,교육·취업,false,true
+2026-07-06,5000,아르바이트 전 간식,expense,카페·간식,false,false
+2026-07-06,7900,세제와 휴지 구입,expense,생활,false,true
+2026-07-07,8200,아르바이트 중 식사,expense,식비,false,true
+2026-07-07,3400,아르바이트 왕복 교통,expense,교통,false,true
+2026-07-08,39000,휴대폰 요금,expense,통신,true,true
+2026-07-08,23400,달걀과 채소 구입,expense,식비,false,true
+2026-07-09,11600,스터디 후 저녁,expense,식비,false,true
+2026-07-10,1000000,주말 아르바이트 급여,income,아르바이트,false,false
+2026-07-10,4200,자기소개서 작성 중 커피,expense,카페·간식,false,false
+2026-07-10,1700,교육장 이동,expense,교통,false,true
+2026-07-11,10900,취업 문서용 클라우드 구독,expense,구독,true,false
+2026-07-11,6800,편의점 간편식,expense,식비,false,true
+2026-07-11,17300,친구와 영화 관람,expense,여가,false,false
+2026-07-12,59000,면접용 셔츠 구입,expense,의류,false,true
+2026-07-12,29300,쌀과 반찬 재료 구입,expense,식비,false,true
+2026-07-13,8900,점심 국밥,expense,식비,false,true
+2026-07-13,5700,스터디 모임 음료,expense,카페·간식,false,false
+2026-07-13,3300,채용설명회 왕복 교통,expense,교통,false,true
+2026-07-14,10000,집 근처 저녁 식사,expense,식비,false,true
+2026-07-14,12500,생활용품 보충,expense,생활,false,true
+2026-07-15,57000,원룸 관리비,expense,주거,true,true
+2026-07-16,7600,샌드위치 점심,expense,식비,false,true
+2026-07-16,1700,아르바이트 출근,expense,교통,false,true
+2026-07-17,16400,과일과 우유 구입,expense,식비,false,true
+2026-07-17,3300,도서관 휴식 간식,expense,카페·간식,false,false
+2026-07-18,11000,취업 스터디 후 식사,expense,식비,false,true
+2026-07-18,12000,모의면접 스터디 회비,expense,교육·취업,false,true
+2026-07-19,12000,포트폴리오 컬러 출력,expense,교육·취업,false,true
+2026-07-19,8400,아르바이트 중 점심,expense,식비,false,true
+2026-07-19,1700,스터디 모임 이동,expense,교통,false,true
+2026-07-20,31800,전기요금,expense,주거,true,true
+2026-07-21,4500,면접 준비 중 커피,expense,카페·간식,false,false
+2026-07-22,9300,덮밥으로 저녁,expense,식비,false,true
+2026-07-22,3400,아르바이트 왕복 교통,expense,교통,false,true
+2026-07-23,33400,주말 식재료 장보기,expense,식비,false,true
+2026-07-24,8000,김밥과 음료,expense,식비,false,true
+2026-07-25,16900,가스와 수도요금,expense,주거,true,true
+2026-07-25,5400,주말 카페 음료,expense,카페·간식,false,false
+2026-07-25,1700,면접 준비 모임 이동,expense,교통,false,true
+2026-07-26,9700,주말 점심 식사,expense,식비,false,true
+2026-07-26,11400,주말 취미 활동,expense,여가,false,false
+2026-07-27,18000,면접 전 이발,expense,생활,false,true
+2026-07-27,5400,쓰레기봉투 구입,expense,생활,false,true
+2026-07-28,7100,간단한 저녁 식사,expense,식비,false,true
+2026-07-28,3300,월말 아르바이트 왕복 교통,expense,교통,false,true
+2026-07-29,21400,간편식과 생필 식재료 구입,expense,식비,false,true
+2026-07-29,3900,월말 공부 간식,expense,카페·간식,false,false
+2026-07-30,11300,월말 스터디 식사,expense,식비,false,true
+2026-08-01,300000,부모님 생활비 지원,income,용돈,false,false
+2026-08-01,450000,원룸 월세,expense,주거,true,true
+2026-08-01,2000,도서관 이동,expense,교통,false,true
+2026-08-02,7100,점심 백반,expense,식비,false,true
+2026-08-02,2100,스터디 중 아메리카노,expense,카페·간식,false,false
+2026-08-03,110000,취업 준비 독서실 이용료,expense,교육·취업,true,true
+2026-08-03,17600,일주일 장보기,expense,식비,false,true
+2026-08-04,8100,저녁 도시락,expense,식비,false,true
+2026-08-04,2000,취업 스터디 이동,expense,교통,false,true
+2026-08-05,22000,타지역 면접 왕복버스,expense,교통,false,true
+2026-08-05,8600,분식으로 점심,expense,식비,false,true
+2026-08-05,6800,취업 준비 교재 구입,expense,교육·취업,false,true
+2026-08-06,2900,아르바이트 전 간식,expense,카페·간식,false,false
+2026-08-06,6700,세제와 휴지 구입,expense,생활,false,true
+2026-08-07,7400,아르바이트 중 식사,expense,식비,false,true
+2026-08-07,4200,아르바이트 왕복 교통,expense,교통,false,true
+2026-08-08,39000,휴대폰 요금,expense,통신,true,true
+2026-08-08,21200,달걀과 채소 구입,expense,식비,false,true
+2026-08-09,10500,스터디 후 저녁,expense,식비,false,true
+2026-08-10,1080000,주말 아르바이트 급여,income,아르바이트,false,false
+2026-08-10,2500,자기소개서 작성 중 커피,expense,카페·간식,false,false
+2026-08-10,2000,교육장 이동,expense,교통,false,true
+2026-08-11,10900,취업 문서용 클라우드 구독,expense,구독,true,false
+2026-08-11,6200,편의점 간편식,expense,식비,false,true
+2026-08-11,8300,친구와 영화 관람,expense,여가,false,false
+2026-08-12,26500,쌀과 반찬 재료 구입,expense,식비,false,true
+2026-08-13,6500,면접용 이력서 출력,expense,교육·취업,false,true
+2026-08-13,8100,점심 국밥,expense,식비,false,true
+2026-08-13,3400,스터디 모임 음료,expense,카페·간식,false,false
+2026-08-13,4100,채용설명회 왕복 교통,expense,교통,false,true
+2026-08-14,9000,집 근처 저녁 식사,expense,식비,false,true
+2026-08-14,10600,생활용품 보충,expense,생활,false,true
+2026-08-15,59000,원룸 관리비,expense,주거,true,true
+2026-08-16,6800,샌드위치 점심,expense,식비,false,true
+2026-08-16,2000,아르바이트 출근,expense,교통,false,true
+2026-08-17,14800,과일과 우유 구입,expense,식비,false,true
+2026-08-17,2000,도서관 휴식 간식,expense,카페·간식,false,false
+2026-08-18,10000,취업 스터디 후 식사,expense,식비,false,true
+2026-08-18,9600,모의면접 스터디 회비,expense,교육·취업,false,true
+2026-08-19,7600,아르바이트 중 점심,expense,식비,false,true
+2026-08-19,2000,스터디 모임 이동,expense,교통,false,true
+2026-08-20,39200,전기요금,expense,주거,true,true
+2026-08-20,3000,지원서 제출용 증명서 발급,expense,교육·취업,false,true
+2026-08-21,2700,면접 준비 중 커피,expense,카페·간식,false,false
+2026-08-22,8500,덮밥으로 저녁,expense,식비,false,true
+2026-08-22,4200,아르바이트 왕복 교통,expense,교통,false,true
+2026-08-23,30200,주말 식재료 장보기,expense,식비,false,true
+2026-08-24,7200,김밥과 음료,expense,식비,false,true
+2026-08-25,14800,가스와 수도요금,expense,주거,true,true
+2026-08-25,3200,주말 카페 음료,expense,카페·간식,false,false
+2026-08-25,2000,면접 준비 모임 이동,expense,교통,false,true
+2026-08-26,10800,면접 일정 중 점심,expense,식비,false,true
+2026-08-26,8700,주말 점심 식사,expense,식비,false,true
+2026-08-26,5400,주말 취미 활동,expense,여가,false,false
+2026-08-27,4600,쓰레기봉투 구입,expense,생활,false,true
+2026-08-28,6500,간단한 저녁 식사,expense,식비,false,true
+2026-08-28,4100,월말 아르바이트 왕복 교통,expense,교통,false,true
+2026-08-29,19400,간편식과 생필 식재료 구입,expense,식비,false,true
+2026-08-29,2300,월말 공부 간식,expense,카페·간식,false,false
+2026-08-30,10300,월말 스터디 식사,expense,식비,false,true
